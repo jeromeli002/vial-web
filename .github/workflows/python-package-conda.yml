@@ -1,0 +1,27 @@
+name: CI
+
+on: [push]
+
+jobs:
+  build-linux:
+    runs-on: ubuntu-22.04
+
+    container:
+      image: ghcr.io/svalboard/vial-gui-build:latest
+
+    steps:
+    - uses: actions/checkout@v3
+
+    - name: Add safe directory
+      run: git config --global --add safe.directory "$GITHUB_WORKSPACE"
+
+    - name: Build
+      run: |
+        cd web
+        ./build.sh
+
+    - name: Deploy Web Sit.
+      uses: peaceiris/actions-gh-pages@v3
+      with:
+        github_token: ${{ secrets.GITHUB_TOKEN }}
+        publish_dir: ./web/build/.  # Replace with 
